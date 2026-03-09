@@ -1,0 +1,3 @@
+go-xldiff
+*.xlsx
+!testdata/**/*.xlsx
