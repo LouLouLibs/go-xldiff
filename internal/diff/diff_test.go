@@ -149,6 +149,24 @@ func TestKeyDiff_CompositeKey(t *testing.T) {
 	}
 }
 
+func TestKeyDiff_DuplicateKeyWarning(t *testing.T) {
+	a := &reader.Table{
+		Headers:  []string{"ID", "Name"},
+		Rows:     [][]string{{"1", "Alice"}, {"1", "Bob"}},
+		FileName: "a.xlsx",
+	}
+	b := &reader.Table{
+		Headers:  []string{"ID", "Name"},
+		Rows:     [][]string{{"1", "Charlie"}},
+		FileName: "b.xlsx",
+	}
+
+	_, warnings := diff.CompareWithWarnings(a, b, []string{"ID"})
+	if len(warnings) == 0 {
+		t.Error("expected duplicate key warning")
+	}
+}
+
 func TestKeyDiff_NumericKeyIndex(t *testing.T) {
 	a := &reader.Table{
 		Headers: []string{"ID", "Name"},

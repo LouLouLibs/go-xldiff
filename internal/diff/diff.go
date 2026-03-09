@@ -1,6 +1,7 @@
 package diff
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -36,6 +37,18 @@ type DiffResult struct {
 // HasDifferences returns true when any adds, removes, or modifications exist.
 func (r *DiffResult) HasDifferences() bool {
 	return len(r.Added) > 0 || len(r.Removed) > 0 || len(r.Modified) > 0
+}
+
+// CompareWithWarnings diffs two tables and returns any warnings (e.g. duplicate keys).
+func CompareWithWarnings(a, b *reader.Table, keys []string) (*DiffResult, []string) {
+	var warnings []string
+	if len(keys) > 0 {
+		keyIndices := resolveKeyIndices(a.Headers, keys)
+		warnings = append(warnings, checkDuplicateKeys(a.Rows, keyIndices, a.FileName)...)
+		warnings = append(warnings, checkDuplicateKeys(b.Rows, keyIndices, b.FileName)...)
+	}
+	result := Compare(a, b, keys)
+	return result, warnings
 }
 
 // Compare diffs two tables. When keys is nil or empty, positional (all-column)
@@ -179,4 +192,17 @@ func isKeyIndex(i int, keyIndices []int) bool {
 
 func rowKey(row []string) string {
 	return strings.Join(row, "\x00")
+}
+
+func checkDuplicateKeys(rows [][]string, keyIndices []int, label string) []string {
+	var warnings []string
+	seen := make(map[string]bool)
+	for _, row := range rows {
+		k := extractKeyString(row, keyIndices)
+		if seen[k] {
+			warnings = append(warnings, fmt.Sprintf("duplicate key %q in %s", k, label))
+		}
+		seen[k] = true
+	}
+	return warnings
 }

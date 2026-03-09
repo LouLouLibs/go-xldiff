@@ -64,7 +64,10 @@ func runDiff(cmd *cobra.Command, args []string) error {
 		keys = strings.Split(keyFlag, ",")
 	}
 
-	result := diff.Compare(table1, table2, keys)
+	result, warnings := diff.CompareWithWarnings(table1, table2, keys)
+	for _, w := range warnings {
+		fmt.Fprintf(os.Stderr, "warning: %s\n", w)
+	}
 
 	switch formatFlag {
 	case "json":
