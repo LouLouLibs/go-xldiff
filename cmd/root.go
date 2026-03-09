@@ -36,8 +36,14 @@ func init() {
 }
 
 func Execute() {
+	rootCmd.SilenceErrors = true
+	rootCmd.SilenceUsage = true
 	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
+		if err == ErrDifferencesFound {
+			os.Exit(1)
+		}
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(2)
 	}
 }
 
@@ -83,7 +89,10 @@ func runDiff(cmd *cobra.Command, args []string) error {
 	}
 
 	if result.HasDifferences() {
-		os.Exit(1)
+		return ErrDifferencesFound
 	}
 	return nil
 }
+
+// ErrDifferencesFound is returned when differences are detected (for exit code 1).
+var ErrDifferencesFound = fmt.Errorf("differences found")

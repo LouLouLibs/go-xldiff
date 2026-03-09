@@ -29,7 +29,7 @@ func WriteJSON(w io.Writer, result *diff.DiffResult) error {
 	out := jsonOutput{
 		Added:    rowsToMaps(result.Headers, result.Added),
 		Removed:  rowsToMaps(result.Headers, result.Removed),
-		Modified: modifiedToJSON(result.Modified),
+		Modified: modifiedToJSON(result.Modified, result.KeyColumns),
 	}
 	if out.Added == nil {
 		out.Added = []map[string]string{}
@@ -60,12 +60,16 @@ func rowsToMaps(headers []string, rows []diff.Row) []map[string]string {
 	return result
 }
 
-func modifiedToJSON(mods []diff.RowDiff) []jsonModified {
+func modifiedToJSON(mods []diff.RowDiff, keyColumns []string) []jsonModified {
 	var result []jsonModified
 	for _, mod := range mods {
 		keyMap := make(map[string]string)
 		for i, v := range mod.Key {
-			keyMap[fmt.Sprintf("key%d", i)] = v
+			name := fmt.Sprintf("key%d", i)
+			if i < len(keyColumns) && keyColumns[i] != "" {
+				name = keyColumns[i]
+			}
+			keyMap[name] = v
 		}
 		var changes []jsonChange
 		for _, c := range mod.Changes {

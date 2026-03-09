@@ -28,10 +28,11 @@ type RowDiff struct {
 
 // DiffResult holds the complete result of comparing two tables.
 type DiffResult struct {
-	Headers  []string
-	Added    []Row
-	Removed  []Row
-	Modified []RowDiff
+	Headers    []string
+	KeyColumns []string
+	Added      []Row
+	Removed    []Row
+	Modified   []RowDiff
 }
 
 // HasDifferences returns true when any adds, removes, or modifications exist.
@@ -105,6 +106,14 @@ func comparePositional(a, b *reader.Table, result *DiffResult) {
 
 func compareByKey(a, b *reader.Table, keys []string, result *DiffResult) {
 	keyIndices := resolveKeyIndices(a.Headers, keys)
+
+	// Store key column names for output formatters
+	result.KeyColumns = make([]string, len(keyIndices))
+	for i, idx := range keyIndices {
+		if idx < len(a.Headers) {
+			result.KeyColumns[i] = a.Headers[idx]
+		}
+	}
 
 	mapA := buildKeyMap(a.Rows, keyIndices)
 	mapB := buildKeyMap(b.Rows, keyIndices)
