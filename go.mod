@@ -1,4 +1,4 @@
-module github.com/loulou/go-xldiff
+module github.com/louloulibs/go-xldiff
 
 go 1.26.1
 

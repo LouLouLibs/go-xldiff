@@ -3,8 +3,8 @@ package diff_test
 import (
 	"testing"
 
-	"github.com/loulou/go-xldiff/internal/diff"
-	"github.com/loulou/go-xldiff/internal/reader"
+	"github.com/louloulibs/go-xldiff/internal/diff"
+	"github.com/louloulibs/go-xldiff/internal/reader"
 )
 
 func TestPositionalDiff_NoDifferences(t *testing.T) {

@@ -5,8 +5,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/loulou/go-xldiff/internal/diff"
-	"github.com/loulou/go-xldiff/internal/reader"
+	"github.com/louloulibs/go-xldiff/internal/diff"
+	"github.com/louloulibs/go-xldiff/internal/reader"
 )
 
 const (

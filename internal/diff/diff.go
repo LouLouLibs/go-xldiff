@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/loulou/go-xldiff/internal/reader"
+	"github.com/louloulibs/go-xldiff/internal/reader"
 )
 
 // Row holds the cell values for a single spreadsheet row.

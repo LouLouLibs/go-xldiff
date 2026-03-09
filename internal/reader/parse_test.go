@@ -3,7 +3,7 @@ package reader_test
 import (
 	"testing"
 
-	"github.com/loulou/go-xldiff/internal/reader"
+	"github.com/louloulibs/go-xldiff/internal/reader"
 )
 
 func TestParseFileArg(t *testing.T) {

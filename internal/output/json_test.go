@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/loulou/go-xldiff/internal/diff"
-	"github.com/loulou/go-xldiff/internal/output"
+	"github.com/louloulibs/go-xldiff/internal/diff"
+	"github.com/louloulibs/go-xldiff/internal/output"
 )
 
 func TestJSONOutput(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"encoding/csv"
 	"io"
 
-	"github.com/loulou/go-xldiff/internal/diff"
+	"github.com/louloulibs/go-xldiff/internal/diff"
 )
 
 func WriteCSV(w io.Writer, result *diff.DiffResult) error {

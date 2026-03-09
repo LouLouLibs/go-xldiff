@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/loulou/go-xldiff/internal/diff"
-	"github.com/loulou/go-xldiff/internal/output"
-	"github.com/loulou/go-xldiff/internal/reader"
+	"github.com/louloulibs/go-xldiff/internal/diff"
+	"github.com/louloulibs/go-xldiff/internal/output"
+	"github.com/louloulibs/go-xldiff/internal/reader"
 )
 
 func TestTextOutput_NoChanges(t *testing.T) {

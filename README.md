@@ -7,13 +7,13 @@ Compare two Excel sheets and report added, removed, and modified rows.
 ## Installation
 
 ```bash
-go install github.com/loulou/go-xldiff@latest
+go install github.com/louloulibs/go-xldiff@latest
 ```
 
 Or build from source:
 
 ```bash
-git clone https://github.com/loulou/go-xldiff.git
+git clone https://github.com/louloulibs/go-xldiff.git
 cd go-xldiff
 go build -o go-xldiff .
 ```

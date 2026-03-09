@@ -1,6 +1,6 @@
 package main
 
-import "github.com/loulou/go-xldiff/cmd"
+import "github.com/louloulibs/go-xldiff/cmd"
 
 func main() {
 	cmd.Execute()
