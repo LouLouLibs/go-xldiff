@@ -1,6 +1,7 @@
 package diff
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/loulou/go-xldiff/internal/reader"
@@ -90,7 +91,90 @@ func comparePositional(a, b *reader.Table, result *DiffResult) {
 }
 
 func compareByKey(a, b *reader.Table, keys []string, result *DiffResult) {
-	// Placeholder — implemented in Task 5.
+	keyIndices := resolveKeyIndices(a.Headers, keys)
+
+	mapA := buildKeyMap(a.Rows, keyIndices)
+	mapB := buildKeyMap(b.Rows, keyIndices)
+
+	for k, rowA := range mapA {
+		rowB, exists := mapB[k]
+		if !exists {
+			result.Removed = append(result.Removed, Row{Values: rowA})
+			continue
+		}
+		var changes []CellChange
+		for i, header := range a.Headers {
+			if isKeyIndex(i, keyIndices) {
+				continue
+			}
+			if rowA[i] != rowB[i] {
+				changes = append(changes, CellChange{
+					Column:   header,
+					OldValue: rowA[i],
+					NewValue: rowB[i],
+				})
+			}
+		}
+		if len(changes) > 0 {
+			keyVals := extractKey(rowA, keyIndices)
+			result.Modified = append(result.Modified, RowDiff{Key: keyVals, Changes: changes})
+		}
+	}
+
+	for k, rowB := range mapB {
+		if _, exists := mapA[k]; !exists {
+			result.Added = append(result.Added, Row{Values: rowB})
+		}
+	}
+}
+
+func resolveKeyIndices(headers []string, keys []string) []int {
+	indices := make([]int, len(keys))
+	for i, key := range keys {
+		if idx, err := strconv.Atoi(key); err == nil && idx >= 0 && idx < len(headers) {
+			indices[i] = idx
+			continue
+		}
+		for j, h := range headers {
+			if h == key {
+				indices[i] = j
+				break
+			}
+		}
+	}
+	return indices
+}
+
+func buildKeyMap(rows [][]string, keyIndices []int) map[string][]string {
+	m := make(map[string][]string)
+	for _, row := range rows {
+		k := extractKeyString(row, keyIndices)
+		m[k] = row
+	}
+	return m
+}
+
+func extractKey(row []string, keyIndices []int) []string {
+	vals := make([]string, len(keyIndices))
+	for i, idx := range keyIndices {
+		if idx < len(row) {
+			vals[i] = row[idx]
+		}
+	}
+	return vals
+}
+
+func extractKeyString(row []string, keyIndices []int) string {
+	return strings.Join(extractKey(row, keyIndices), "\x00")
+}
+
+func isKeyIndex(i int, keyIndices []int) bool {
+	for _, idx := range keyIndices {
+		if i == idx {
+			return true
+		}
+	}
+	return false
 }
 
 func rowKey(row []string) string {
