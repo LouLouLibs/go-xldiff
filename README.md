@@ -1,6 +1,14 @@
-# go-xldiff
+<div align="center">
 
-Compare two Excel sheets and report added, removed, and modified rows.
+<h1>go-xldiff</h1>
+<h3>Compare two Excel sheets and report added, removed, and modified rows</h3>
+
+[![Vibecoded](https://img.shields.io/badge/vibecoded-%E2%9C%A8-blueviolet)](https://claude.ai)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+</div>
+
+***
 
 `go-xldiff` reads two `.xlsx` sheets, diffs them row by row, and prints the differences to stdout. It supports positional comparison (all columns must match) and key-based comparison (match rows by designated columns, then report cell-level changes).
 
