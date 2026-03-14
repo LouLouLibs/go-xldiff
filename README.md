@@ -10,6 +10,12 @@
 
 ***
 
+<div align="center">
+<a href="demo/demo.gif">
+<img src="demo/demo.gif" width="800" alt="Demo of go-xldiff" />
+</a>
+</div>
+
 `go-xldiff` reads two `.xlsx` sheets, diffs them row by row, and prints the differences to stdout. It supports positional comparison (all columns must match) and key-based comparison (match rows by designated columns, then report cell-level changes).
 
 ## Installation
